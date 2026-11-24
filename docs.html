@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentación técnica · AuditLens</title>
+<meta name="description" content="Por qué no existe una sola SOQL o SOSL para listar los registros de un usuario en Salesforce, qué alternativas hay y qué consulta AuditLens. Technical notes on SOQL, SOSL, feed tracking and CDC.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230b6bcb'/%3E%3Ccircle cx='10.5' cy='10.5' r='5' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M14.6 14.6 19 19' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#f6f8fb, #0a1118);
+    --card: light-dark(#ffffff, #101a24);
+    --ink: light-dark(#0b1f31, #e8eef6);
+    --ink-soft: light-dark(#4d6478, #9aafc3);
+    --ink-faint: light-dark(#7b93a7, #6d8296);
+    --line: light-dark(#e2e9f1, #1e2c39);
+    --accent: light-dark(#0b6bcb, #64b5ff);
+    --accent-soft: light-dark(#eaf3fe, #12263a);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(900px 320px at 50% -160px, var(--accent-soft), transparent 70%), var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 22px 72px; }
+  header { display: flex; align-items: center; gap: 13px; margin-bottom: 10px; }
+  .mark {
+    display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(140deg, #1a8bff, #0a5cb0); color: #fff; flex: 0 0 auto;
+    box-shadow: 0 6px 18px rgba(11, 107, 203, .28);
+  }
+  .mark svg { width: 22px; height: 22px; }
+  h1 { margin: 0; font-size: 25px; letter-spacing: -.02em; }
+  .sub { margin: 0; color: var(--ink-soft); font-size: 14px; }
+  .lang { margin: 18px 0 30px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .lang a {
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    color: var(--accent); border: 1px solid var(--line); background: var(--card);
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .lang a:hover { border-color: var(--accent); }
+  h2 {
+    margin: 34px 0 10px; font-size: 19px; letter-spacing: -.01em;
+    padding-top: 22px; border-top: 1px solid var(--line);
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  h3 { margin: 22px 0 6px; font-size: 15.5px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  strong { font-weight: 650; }
+  code {
+    font: 13.5px/1.4 var(--mono); padding: 1px 5px; border-radius: 5px;
+    background: light-dark(#eef2f7, #182635); color: var(--ink);
+  }
+  pre {
+    margin: 0 0 14px; padding: 14px 16px; overflow-x: auto;
+    background: light-dark(#f2f6fa, #0d1720); border: 1px solid var(--line); border-radius: 10px;
+    font: 12.8px/1.55 var(--mono); color: var(--ink);
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 20px; margin: 18px 0 8px;
+  }
+  .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+  tr:last-child td { border-bottom: none; }
+  .note { font-size: 13.5px; color: var(--ink-faint); }
+  .updated { font-size: 13px; color: var(--ink-faint); margin: 0 0 6px; }
+  footer {
+    margin-top: 46px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--ink-soft);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  a { color: var(--accent); }
+  .en { margin-top: 56px; }
+  @media (max-width: 560px) {
+    .wrap { padding: 32px 16px 56px; }
+    h1 { font-size: 21px; }
+    table, th, td { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round">
+        <circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/><circle cx="10.5" cy="10.5" r="1.6" fill="currentColor" stroke="none"/>
+      </svg>
+    </span>
+    <div>
+      <h1>Documentación técnica</h1>
+      <p class="sub">AuditLens · Registros por usuario: SOQL, SOSL y alternativas · v1.3.0</p>
+    </div>
+  </header>
+
+  <nav class="lang" aria-label="Secciones">
+    <a href="index.html">Privacidad</a>
+    <a href="#en">English</a>
+  </nav>
+
+  <section id="es" lang="es">
+    <p class="updated">Última actualización: 24 de noviembre de 2026</p>
+
+    <div class="card">
+      <p><strong>Resumen:</strong> no hay una SOQL ni una SOSL que devuelva de forma fiable
+      todos los registros que creó o modificó un usuario. SOQL consulta un objeto cada vez;
+      SOSL cruza objetos pero exige un término de búsqueda y se trunca a ~2.000 resultados.
+      AuditLens consulta objeto a objeto y lo explica en pantalla.</p>
+    </div>
+
+    <h2>Por qué no hay una consulta única</h2>
+    <p><strong>SOQL es mono-objeto.</strong> Permite relaciones y subconsultas dentro de un
+    objeto, pero no <code>UNION</code> ni joins entre objetos. «Todo lo de este usuario» son
+    N consultas, una por objeto.</p>
+    <p><strong>SOSL sí cruza objetos y admite <code>WHERE</code></strong> dentro de
+    <code>RETURNING</code>, pero <code>FIND</code> es obligatorio: no existe un «buscar todo».
+    El truco <code>FIND '* OR *'</code> aplica los filtros <em>después</em> del índice, así que
+    con muchas filas devuelve vacío o incompleto sin avisar.</p>
+
+    <pre><code>FIND {acme}
+IN ALL FIELDS
+RETURNING Account(Id, Name WHERE CreatedById = '005...' AND CreatedDate = LAST_N_DAYS:1),
+          Contact(Id, Name WHERE CreatedById = '005...')</code></pre>
+
+    <h2>El problema de «modificado»</h2>
+    <p><code>LastModifiedById</code> solo dice quién hizo la <strong>última</strong>
+    modificación. Si Ana edita el lunes y Luis el martes, buscar
+    <code>LastModifiedById = Ana</code> el lunes no la encuentra. Para un historial real hacen
+    falta Field History Tracking, feed tracking, CDC o auditoría externa.</p>
+
+    <h2>Opciones que funcionan</h2>
+    <table>
+      <thead><tr><th>Necesidad</th><th>Camino</th><th>Cobertura</th></tr></thead>
+      <tbody>
+        <tr><td>Creados y modificados en objetos concretos</td><td>SOQL por objeto</td><td>Fiable; N consultas</td></tr>
+        <tr><td>Cambios en muchos objetos, una consulta</td><td><code>FeedItem</code> + <code>FeedTrackedChanges</code></td><td>Solo campos con feed tracking, 45 días, sin creaciones</td></tr>
+        <tr><td>Historial de campos a largo plazo</td><td><code>FieldHistoryArchive</code> (Shield)</td><td>Campos auditados; sin filtro por usuario</td></tr>
+        <tr><td>Creaciones, cambios y borrados recientes</td><td>Change Data Capture</td><td>3 días, solo streaming</td></tr>
+        <tr><td>Actividad de API o de interfaz</td><td>Event Monitoring</td><td>No es DML por registro</td></tr>
+      </tbody>
+    </table>
+
+    <h3>La consulta que usa AuditLens</h3>
+    <p>Hasta 8 objetos y 200 registros por lista, con la sesión ya abierta y sin backend:</p>
+    <pre><code>SELECT Id, Name, CreatedDate FROM Account
+WHERE CreatedById = '005...'
+  AND CreatedDate &gt;= 2026-11-24T00:00:00Z
+  AND CreatedDate &lt;= 2026-11-24T23:59:59Z
+ORDER BY CreatedDate DESC
+LIMIT 200</code></pre>
+    <p>Y la misma con <code>LastModifiedById</code> / <code>LastModifiedDate</code> para los
+    modificados. Los registros se muestran en pantalla, no se guardan, y la extensión es de
+    solo lectura.</p>
+
+    <h2>Límites que conviene conocer</h2>
+    <ul>
+      <li><code>FeedItem</code> solo cubre campos con feed tracking (máximo 20 por objeto), no
+      incluye creaciones y Salesforce borra los cambios de más de 45 días sin likes ni
+      comentarios.</li>
+      <li><code>FieldHistoryArchive</code> requiere Shield o Field Audit Trail, no se puede
+      filtrar por usuario y tampoco incluye creaciones.</li>
+      <li>Change Data Capture sí trae creaciones, cambios y borrados con autor, pero solo
+      conserva 3 días y se consume por streaming, no por SOQL.</li>
+      <li>Las consultas por objeto consumen límites de API y dependen de permisos y sharing:
+      no hay forma de saltárselos desde el navegador.</li>
+    </ul>
+    <p>AuditLens consulta hasta 8 objetos y 200 registros por lista, y lo dice en pantalla en
+    lugar de prometer «todo».</p>
+
+    <h2>Verificación</h2>
+    <p class="note">Conclusiones basadas en la documentación oficial de Salesforce y en casos
+    publicados. No se han ejecutado contra una org real: la atribución de
+    <code>FeedItem.CreatedById</code>, los límites por edición y el comportamiento de
+    <code>FieldHistoryArchive</code> conviene comprobarlos en la org donde se use.</p>
+
+    <h2>Fuentes</h2>
+    <ul class="note">
+      <li><a href="https://developer.salesforce.com/docs/platform/salesforce-soql-sosl/guide/sforce-api-calls-sosl-where.html">SOSL WHERE</a> · <a href="https://developer.salesforce.com/docs/platform/salesforce-soql-sosl/guide/sforce-api-calls-sosl-returning.html">RETURNING</a> · <a href="https://developer.salesforce.com/docs/platform/salesforce-soql-sosl/guide/sforce-api-calls-sosl-find.html">FIND</a></li>
+      <li><a href="https://salesforce.stackexchange.com/questions/24877/how-do-i-sosl-across-objects-matching-all-records-with-find-clause">El truco <code>* OR *</code> y su límite</a></li>
+      <li><a href="https://help.salesforce.com/s/articleView?id=experience.collab_feed_tracking_overview.htm&amp;language=en_US&amp;type=5">Feed tracking y retención</a></li>
+      <li><a href="https://developer.salesforce.com/docs/platform/field-history-retention/guide/field-history-soql.html">FieldHistoryArchive</a> · <a href="https://developer.salesforce.com/docs/platform/change-data-capture/guide/cdc-event-fields-header.html">Change Data Capture</a></li>
+    </ul>
+  </section>
+
+  <section id="en" class="en" lang="en">
+    <h2>Technical notes</h2>
+    <p class="updated">Last updated: November 24, 2026</p>
+
+    <div class="card">
+      <p><strong>Summary:</strong> no single SOQL or SOSL query reliably returns every record a
+      user created or modified. SOQL is single-object; SOSL spans objects but requires a search
+      term and truncates at ~2,000 results. AuditLens queries object by object and says so in
+      the UI.</p>
+    </div>
+
+    <h3>Why there is no single query</h3>
+    <p>SOQL has no <code>UNION</code> or cross-object joins, so "everything this user did" means
+    one query per object. SOSL does span objects and supports <code>WHERE</code> inside
+    <code>RETURNING</code>, but <code>FIND</code> is mandatory and there is no match-all term;
+    the <code>FIND '* OR *'</code> workaround filters after the search index and silently loses
+    records past the ~2,000 cap.</p>
+
+    <h3>"Modified by" is not a history</h3>
+    <p><code>LastModifiedById</code> only knows the latest editor. If Ana edits on Monday and
+    Luis on Tuesday, a Monday search for Ana does not find it. Real history needs Field History
+    Tracking, feed tracking, CDC or external auditing.</p>
+
+    <h3>Options that work</h3>
+    <table>
+      <thead><tr><th>Need</th><th>Approach</th><th>Coverage</th></tr></thead>
+      <tbody>
+        <tr><td>Created/changed records on known objects</td><td>Per-object SOQL</td><td>Reliable; N queries</td></tr>
+        <tr><td>Changes across objects in one query</td><td><code>FeedItem</code> + <code>FeedTrackedChanges</code></td><td>Feed-tracked fields only, 45 days, no creates</td></tr>
+        <tr><td>Long-term field history</td><td><code>FieldHistoryArchive</code> (Shield)</td><td>Audited fields; no user filter</td></tr>
+        <tr><td>Recent creates, updates, deletes</td><td>Change Data Capture</td><td>3 days, streaming only</td></tr>
+      </tbody>
+    </table>
+
+    <h3>What AuditLens runs</h3>
+    <p>Up to 8 objects and 200 rows per list, using the session already open, with no backend:</p>
+    <pre><code>SELECT Id, Name, CreatedDate FROM Account
+WHERE CreatedById = '005...'
+  AND CreatedDate &gt;= 2026-11-24T00:00:00Z
+ORDER BY CreatedDate DESC
+LIMIT 200</code></pre>
+    <p>Plus the same query with <code>LastModifiedById</code> for modifications. Results are
+    displayed on screen, never stored, and the extension is read-only.</p>
+
+    <h3>Limits to keep in mind</h3>
+    <ul>
+      <li><code>FeedItem</code> only covers feed-tracked fields (max 20 per object), never
+      record creation, and Salesforce deletes tracked changes older than 45 days that have no
+      likes or comments.</li>
+      <li><code>FieldHistoryArchive</code> needs Shield or Field Audit Trail, cannot be filtered
+      by user and does not include creations either.</li>
+      <li>Change Data Capture does include creates, updates and deletes with the author, but it
+      is kept for 3 days and consumed by streaming, not SOQL.</li>
+      <li>Per-object queries consume API limits and depend on permissions and sharing; there is
+      no browser-side way around that.</li>
+    </ul>
+    <p>AuditLens queries up to 8 objects and 200 rows per list, and says so on screen instead of
+    promising "everything".</p>
+
+    <p class="note">Based on Salesforce documentation and published cases; not executed against a
+    real org. Verify <code>FeedItem.CreatedById</code> attribution and edition limits in your own
+    org.</p>
+  </section>
+
+  <footer>
+    <span>AuditLens · Sergio González Hidalgo</span>
+    <span><a href="index.html">Privacidad</a> · <a href="mailto:sergiogonzalezhidalgo@gmail.com">Contacto</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

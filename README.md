@@ -7,7 +7,13 @@ Chrome que muestra el Setup Audit Trail de Salesforce.
 - Extensión: <https://github.com/SergioXp/auditlens>
 - Contacto: sergiogonzalezhidalgo@gmail.com
 
-Un solo `index.html` autocontenido, en español e inglés, sin dependencias ni
-analítica. Se publica con GitHub Pages desde la rama `main`.
+Dos páginas autocontenidas, en español e inglés, sin dependencias ni analítica:
+
+- `index.html`: política de privacidad.
+- `docs.html`: notas técnicas sobre cómo se buscan los registros de un usuario
+  (SOQL, SOSL, feed tracking, Field Audit Trail y CDC). Enlazada desde la
+  política y desde la ficha de la tienda.
+
+Se publica con GitHub Pages desde la rama `main`.
 
 AuditLens no está afiliado a Salesforce, Inc.
