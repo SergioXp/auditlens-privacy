@@ -95,7 +95,7 @@
     </span>
     <div>
       <h1>Privacidad de AuditLens</h1>
-      <p class="sub">AuditLens · Salesforce Setup Audit Trail · v1.1.0</p>
+      <p class="sub">AuditLens · Salesforce Setup Audit Trail · v1.2.0</p>
     </div>
   </header>
 
@@ -130,6 +130,7 @@
 
     <h2>A qué se accede</h2>
     <p>Únicamente a la API de la org en la que has iniciado sesión, en modo <strong>solo lectura</strong>, para consultar los registros de auditoría de Setup que ya puedes ver en Salesforce.</p>
+    <p>Si eliges un usuario, la extensión consulta además los objetos que tú indiques (<code>Account</code>, <code>Opportunity</code>…) para listar los registros que esa persona creó o modificó. Esa lista se muestra en pantalla y no se guarda ni se envía a ningún sitio.</p>
     <p>Para autenticar esas consultas, la extensión lee la cookie de sesión <code>sid</code> de esa org. El valor se usa en memoria: <strong>no se guarda en disco ni se envía a ningún sitio</strong>. Cuando cierras sesión en Salesforce, la cookie desaparece y la extensión deja de poder consultar.</p>
 
     <h2>Permisos y para qué sirven</h2>
@@ -192,6 +193,7 @@
 
     <h3>What is accessed</h3>
     <p>Only the API of the org you are signed into, read-only, to query the Setup audit records you can already see in Salesforce.</p>
+    <p>When you pick a user, the extension also queries the objects you list (<code>Account</code>, <code>Opportunity</code>…) to show which records that person created or modified. That list is displayed on screen and is neither stored nor sent anywhere.</p>
     <p>To authenticate those queries the extension reads that org's <code>sid</code> session cookie. The value is used in memory: <strong>never stored on disk and never sent anywhere</strong>. When you sign out of Salesforce the cookie is gone and the extension can no longer query anything.</p>
 
     <h3>Permissions and why</h3>
