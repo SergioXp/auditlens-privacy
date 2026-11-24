@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacidad · AuditLens</title>
+<meta name="description" content="Política de privacidad de AuditLens, la extensión que muestra el Setup Audit Trail de Salesforce. Privacy policy for AuditLens.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230b6bcb'/%3E%3Ccircle cx='10.5' cy='10.5' r='5' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M14.6 14.6 19 19' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#f6f8fb, #0a1118);
+    --card: light-dark(#ffffff, #101a24);
+    --ink: light-dark(#0b1f31, #e8eef6);
+    --ink-soft: light-dark(#4d6478, #9aafc3);
+    --ink-faint: light-dark(#7b93a7, #6d8296);
+    --line: light-dark(#e2e9f1, #1e2c39);
+    --accent: light-dark(#0b6bcb, #64b5ff);
+    --accent-soft: light-dark(#eaf3fe, #12263a);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(900px 320px at 50% -160px, var(--accent-soft), transparent 70%), var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 22px 72px; }
+  header { display: flex; align-items: center; gap: 13px; margin-bottom: 10px; }
+  .mark {
+    display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(140deg, #1a8bff, #0a5cb0); color: #fff; flex: 0 0 auto;
+    box-shadow: 0 6px 18px rgba(11, 107, 203, .28);
+  }
+  .mark svg { width: 22px; height: 22px; }
+  h1 { margin: 0; font-size: 25px; letter-spacing: -.02em; }
+  .sub { margin: 0; color: var(--ink-soft); font-size: 14px; }
+  .lang { margin: 18px 0 30px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .lang a {
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    color: var(--accent); border: 1px solid var(--line); background: var(--card);
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .lang a:hover { border-color: var(--accent); }
+  h2 {
+    margin: 34px 0 10px; font-size: 19px; letter-spacing: -.01em;
+    padding-top: 22px; border-top: 1px solid var(--line);
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  h3 { margin: 22px 0 6px; font-size: 15.5px; }
+  p { margin: 0 0 12px; }
+  ul { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  strong { font-weight: 650; }
+  code {
+    font: 13.5px/1.4 var(--mono); padding: 1px 5px; border-radius: 5px;
+    background: light-dark(#eef2f7, #182635); color: var(--ink);
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 20px; margin: 18px 0 8px;
+  }
+  .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+  td:first-child { white-space: nowrap; font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  tr:last-child td { border-bottom: none; }
+  .note { font-size: 13.5px; color: var(--ink-faint); }
+  .updated { font-size: 13px; color: var(--ink-faint); margin: 0 0 6px; }
+  footer {
+    margin-top: 46px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--ink-soft);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  a { color: var(--accent); }
+  .en { margin-top: 56px; }
+  @media (max-width: 560px) {
+    .wrap { padding: 32px 16px 56px; }
+    h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round">
+        <circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/><circle cx="10.5" cy="10.5" r="1.6" fill="currentColor" stroke="none"/>
+      </svg>
+    </span>
+    <div>
+      <h1>Privacidad de AuditLens</h1>
+      <p class="sub">AuditLens · Salesforce Setup Audit Trail · v1.1.0</p>
+    </div>
+  </header>
+
+  <nav class="lang" aria-label="Idioma">
+    <a href="#es">Español</a>
+    <a href="#en">English</a>
+    <a href="https://github.com/SergioXp/auditlens">Repositorio</a>
+  </nav>
+
+  <section id="es" lang="es">
+    <p class="updated">Última actualización: 24 de noviembre de 2026</p>
+
+    <p>AuditLens es una extensión de navegador que muestra el <strong>Setup Audit Trail</strong> de una org de Salesforce a la que ya has iniciado sesión, con filtros, agrupación por día y detección de cambios sensibles. Esta página explica qué hace con los datos.</p>
+
+    <h2>Lo esencial</h2>
+    <div class="card">
+      <ul>
+        <li><strong>No hay servidores propios.</strong> La extensión no envía información a ningún servicio del desarrollador ni de terceros.</li>
+        <li><strong>Sin cuentas, sin analítica, sin publicidad, sin telemetría.</strong></li>
+        <li><strong>Solo lectura.</strong> No crea, edita ni borra nada en Salesforce.</li>
+        <li><strong>Todo se queda en tu navegador</strong>, en el almacenamiento local de Chrome.</li>
+      </ul>
+    </div>
+
+    <h2>Qué se guarda en tu equipo</h2>
+    <ul>
+      <li>Una caché de las últimas <strong>600 entradas</strong> del audit trail por org, para que la vista aparezca pintada al instante mientras se actualiza.</li>
+      <li>La marca de tiempo de tu <strong>última visita</strong> por org, para poder etiquetar las entradas nuevas.</li>
+      <li>La <strong>configuración de los avisos</strong> (org vigilada y frecuencia) y tu <strong>preferencia de tema</strong> (automático, claro u oscuro).</li>
+    </ul>
+    <p>Todo vive en <code>chrome.storage.local</code>. No se sincroniza con ningún servidor y se borra al desinstalar la extensión.</p>
+
+    <h2>A qué se accede</h2>
+    <p>Únicamente a la API de la org en la que has iniciado sesión, en modo <strong>solo lectura</strong>, para consultar los registros de auditoría de Setup que ya puedes ver en Salesforce.</p>
+    <p>Para autenticar esas consultas, la extensión lee la cookie de sesión <code>sid</code> de esa org. El valor se usa en memoria: <strong>no se guarda en disco ni se envía a ningún sitio</strong>. Cuando cierras sesión en Salesforce, la cookie desaparece y la extensión deja de poder consultar.</p>
+
+    <h2>Permisos y para qué sirven</h2>
+    <table>
+      <thead><tr><th>Permiso</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td>storage</td><td>Guardar en local la caché, la marca de última visita, los avisos y el tema.</td></tr>
+        <tr><td>cookies</td><td>Leer la cookie <code>sid</code> de tu org para autenticar las consultas de solo lectura.</td></tr>
+        <tr><td>alarms</td><td>Comprobar cambios en segundo plano cuando activas los avisos (15 min a 6 h).</td></tr>
+        <tr><td>salesforce.com<br>force.com<br>salesforce-setup.com</td><td>Consultar la API de tu propia org y abrir su página nativa de Setup.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">No se piden permisos de pestañas, scripting ni acceso a otros sitios. La extensión no inyecta código en páginas de Salesforce.</p>
+
+    <h2>Lo que no se hace</h2>
+    <ul>
+      <li>No se recopilan datos personales.</li>
+      <li>No se venden ni comparten datos con terceros.</li>
+      <li>No se usan para publicidad, perfilado ni para evaluar solvencia.</li>
+      <li>No se incorporan SDKs de analítica ni de publicidad, ni código remoto: todo el código va dentro del paquete instalado.</li>
+    </ul>
+
+    <h2>Tus opciones</h2>
+    <ul>
+      <li>Puedes desactivar los avisos desde la propia vista de la extensión.</li>
+      <li>Para eliminar todos los datos guardados, desinstala AuditLens desde <code>chrome://extensions</code>.</li>
+      <li>Para revocar el acceso a la org, cierra sesión en Salesforce.</li>
+    </ul>
+
+    <h2>Cambios en esta política</h2>
+    <p>Si esta política cambia, se actualizará esta página y la fecha de arriba. El texto fuente está en el repositorio público <a href="https://github.com/SergioXp/auditlens-privacy">SergioXp/auditlens-privacy</a>.</p>
+
+    <h2>Contacto</h2>
+    <p>Dudas sobre privacidad: <a href="mailto:sergiogonzalezhidalgo@gmail.com">sergiogonzalezhidalgo@gmail.com</a></p>
+    <p class="note">AuditLens es un proyecto independiente y no está afiliado, patrocinado ni respaldado por Salesforce, Inc. «Salesforce» es una marca registrada de Salesforce, Inc.</p>
+  </section>
+
+  <section id="en" class="en" lang="en">
+    <h2>AuditLens Privacy Policy</h2>
+    <p class="updated">Last updated: November 24, 2026</p>
+
+    <p>AuditLens is a browser extension that shows the <strong>Setup Audit Trail</strong> of a Salesforce org you are already signed into, with filters, day grouping and sensitive-change detection. This page explains what it does with data.</p>
+
+    <div class="card">
+      <ul>
+        <li><strong>No servers of our own.</strong> Nothing is sent to any developer or third-party service.</li>
+        <li><strong>No accounts, analytics, advertising or telemetry.</strong></li>
+        <li><strong>Read-only.</strong> It does not create, edit or delete anything in Salesforce.</li>
+        <li><strong>Everything stays in your browser</strong>, in Chrome's local storage.</li>
+      </ul>
+    </div>
+
+    <h3>What is stored on your machine</h3>
+    <ul>
+      <li>A cache of the last <strong>600 audit entries</strong> per org, so the view renders instantly while it refreshes.</li>
+      <li>A per-org <strong>last-visit timestamp</strong>, used to label new entries.</li>
+      <li>Your <strong>alert settings</strong> (watched org and frequency) and <strong>theme preference</strong> (auto, light or dark).</li>
+    </ul>
+    <p>All of it lives in <code>chrome.storage.local</code>. It is never synced to a server and is removed when you uninstall the extension.</p>
+
+    <h3>What is accessed</h3>
+    <p>Only the API of the org you are signed into, read-only, to query the Setup audit records you can already see in Salesforce.</p>
+    <p>To authenticate those queries the extension reads that org's <code>sid</code> session cookie. The value is used in memory: <strong>never stored on disk and never sent anywhere</strong>. When you sign out of Salesforce the cookie is gone and the extension can no longer query anything.</p>
+
+    <h3>Permissions and why</h3>
+    <table>
+      <thead><tr><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>storage</td><td>Keep the cache, last-visit marker, alert settings and theme locally.</td></tr>
+        <tr><td>cookies</td><td>Read the org's <code>sid</code> cookie to authenticate read-only queries.</td></tr>
+        <tr><td>alarms</td><td>Check for changes in the background when you enable alerts (15 min to 6 h).</td></tr>
+        <tr><td>salesforce.com<br>force.com<br>salesforce-setup.com</td><td>Query your own org's API and open its native Setup page.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">No tabs, scripting or other-site permissions are requested. The extension does not inject code into Salesforce pages.</p>
+
+    <h3>What is not done</h3>
+    <ul>
+      <li>No personal data is collected.</li>
+      <li>No data is sold or shared with third parties.</li>
+      <li>No data is used for advertising, profiling or creditworthiness.</li>
+      <li>No analytics or advertising SDKs and no remote code: all code ships inside the installed package.</li>
+    </ul>
+
+    <h3>Your choices</h3>
+    <ul>
+      <li>Alerts can be turned off from the extension's own view.</li>
+      <li>To remove all stored data, uninstall AuditLens from <code>chrome://extensions</code>.</li>
+      <li>To revoke access to the org, sign out of Salesforce.</li>
+    </ul>
+
+    <h3>Changes to this policy</h3>
+    <p>If this policy changes, this page and the date above will be updated. The source text lives in the public <a href="https://github.com/SergioXp/auditlens-privacy">SergioXp/auditlens-privacy</a> repository.</p>
+
+    <h3>Contact</h3>
+    <p>Privacy questions: <a href="mailto:sergiogonzalezhidalgo@gmail.com">sergiogonzalezhidalgo@gmail.com</a></p>
+    <p class="note">AuditLens is an independent project and is not affiliated with, sponsored or endorsed by Salesforce, Inc. Salesforce is a trademark of Salesforce, Inc.</p>
+  </section>
+
+  <footer>
+    <span>AuditLens · Sergio González Hidalgo</span>
+    <span><a href="https://github.com/SergioXp/auditlens">Extensión</a> · <a href="mailto:sergiogonzalezhidalgo@gmail.com">Contacto</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
